@@ -1,4 +1,3 @@
-# bot.py
 import os
 import random
 import discord
@@ -11,6 +10,7 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 GUILD_ID = os.getenv('GUILD_ID')
+TEXT_CHANNEL_ID = os.getenv('CHANNEL_ID')
 # Denotes the prefix to use the bot in a text channel, in this case '+'
 bot = commands.Bot(command_prefix='+',intents=discord.Intents.all())
 
@@ -19,6 +19,7 @@ bot = commands.Bot(command_prefix='+',intents=discord.Intents.all())
 @bot.command(name='spin')
 async def spin(ctx):
     guild = bot.get_guild(int(GUILD_ID))
+    channel = bot.get_channel(int(TEXT_CHANNEL_ID))
     vc = ctx.author.voice.channel
     # Checks that the text author is in a valid VC
     if vc:
@@ -32,4 +33,11 @@ async def spin(ctx):
             victim = guild.get_member(unlucky)
             # Disconnects user
             await victim.move_to(None)
+            # Special message if the person execuitng the message is 
+            # the victim
+            if(ctx.author.id == unlucky):
+                await channel.send(f'<@{unlucky}> was super unlucky!')
+            else: 
+                await channel.send(f'<@{unlucky}> was shot!')
+
 bot.run(TOKEN)
