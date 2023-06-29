@@ -14,7 +14,6 @@ bot = commands.Bot(command_prefix='+',intents=discord.Intents.all())
 @bot.command(name='spin')
 async def spin(ctx):
     guild = bot.get_guild(int(GUILD_ID))
-    print(guild)
     vc = ctx.author.voice.channel
     if vc:
         voice_states = vc.voice_states
